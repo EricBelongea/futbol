@@ -36,3 +36,11 @@ puts "This is the least accurate team in the 2013/2014 season: " + "#{stat_track
 puts "This is the team with the most tackles in the 2013/2014 season: " + "#{stat_tracker.most_tackles("20132014")}"
 puts "This is the team with the fewest tackles in the 2013/2014 season: " + "#{stat_tracker.fewest_tackles("20132014")}"
 puts "-----------------"
+
+puts "Team Statistics"
+puts "-----------------"
+puts "This is the best season for Montreal Impact: " + "#{stat_tracker.best_season("23")}"
+puts "This is the worst season for Montreal Impact: " + "#{stat_tracker.worst_season("23")}"
+puts "This is Montreal Impact's favorite opponent: " + "#{stat_tracker.favorite_opponent("23")}"
+puts "This is Montreal Impact's rival: " + "#{stat_tracker.rival("23")}"
+puts "-----------------"
