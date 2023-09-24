@@ -105,10 +105,7 @@ class Team
 
   # Highest number of goals a particular team has scored in a single game
   def most_goals_scored(team_id)
-    queried_team_games = @game_team_data.select do |game|
-      game[:team_id] == team_id
-    end
-    highest_scoring_game = queried_team_games.max_by do |game|
+    highest_scoring_game = select_team_games(team_id).max_by do |game|
       game[:goals]
     end
     highest_scoring_game[:goals].to_i
@@ -116,12 +113,21 @@ class Team
 
   # Lowest number of goals a particular team has scored in a single game
   def fewest_goals_scored(team_id)
-    queried_team_games = @game_team_data.select do |game|
-      game[:team_id] == team_id
-    end
-    lowest_scoring_game = queried_team_games.min_by do |game|
+    lowest_scoring_game = select_team_games(team_id).min_by do |game|
       game[:goals]
     end
     lowest_scoring_game[:goals].to_i
+  end
+
+  # Select all games for queried team_id
+  def select_team_games(team_id)
+    queried_team_games = @game_team_data.select do |game|
+      game[:team_id] == team_id
+    end
+  end
+
+	# Name of the opponent that has the lowest win percentage against the given team
+  def favorite_opponent(team_id)
+    
   end
 end

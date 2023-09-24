@@ -87,7 +87,22 @@ RSpec.describe Team do
     expect(@team.fewest_goals_scored("18")).to eq 0
   end
 
-  xit "#favorite_opponent" do
+  it '#select_team_games' do
+    expected = {
+      :game_id=>"2016030231", 
+      :team_id=>"18", 
+      :hoa=>"away", 
+      :result=>"LOSS", 
+      :head_coach=>"Peter Laviolette", 
+      :goals=>"2", 
+      :shots=>"8", 
+      :tackles=>"34"
+    }
+
+    expect(@team.select_team_games("18")[0]).to eq(expected)
+  end
+
+  it "#favorite_opponent" do
     expect(@team.favorite_opponent("18")).to eq "DC United"
   end
 
