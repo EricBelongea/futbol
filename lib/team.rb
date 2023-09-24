@@ -126,18 +126,12 @@ class Team
     end
   end
 
-	# Name of the opponent that has the lowest win percentage against the given team
+	# Name of the opponent that has the lowest win ratio for the queried team
   def favorite_opponent(team_id)
     # List of all the games won by queried team
     games_won = select_team_games(team_id).select do |game|
       game[:result] == "WIN"
     end
-    # compare win hash game_id to game_id in game_data to get teams played against
-    # tally count of wins for each team id
-    # divide tallies by total games played against each opponent
-    # run max_by to return relevant team id
-    # link team id to team name from team_data
-    # team 14 (DC United) should be result
     
     # Link game id between datasets, build list of wins by team id played against
     wins_by_team = Hash.new(0)
@@ -152,6 +146,7 @@ class Team
         wins_by_team[game_by_id[:away_team_id]] += 1.0
       end
     end
+    wins_by_team.sort
 
     # Make list of total games played against by team id
     games_against = Hash.new(0)
@@ -162,9 +157,9 @@ class Team
         games_against[game[:away_team_id]] += 1.0
       end
     end
+    games_against.sort
 
     # Make list of average wins against by team id
-    # I haven't yet figured out how to get this to not spit out junk numbers
     average_wins = Hash.new(0)
     wins_by_team.each do |team_wins, win_count|
       games_against.each do |team_games, game_count|
@@ -175,16 +170,18 @@ class Team
       end
     end
 
-    # Run max_by to return relevant team id
-
+    # Get the team that has the lowest win ratio vs queried team
+    highest_win_ratio = average_wins.max_by do |team_id, win_against|
+      win_against
+    end
 
     # Link team id to team name
-  #   team_name = ""
-  #   @team_data.each do |team|
-  #     if highest_ave_wins_against[0] == team[:team_id]
-  #       team_name += team[:team_name]
-  #     end
-  #   end
-  #   team_name
+    team_name = ""
+    @team_data.each do |team|
+      if highest_win_ratio[0] == team[:team_id]
+        team_name += team[:team_name]
+      end
+    end
+    team_name
   end
 end
