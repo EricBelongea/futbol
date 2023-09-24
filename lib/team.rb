@@ -172,5 +172,14 @@ class Team
         average_wins[team] = average
       end
     end
+
+    # Link team id to team name
+    team_name = ""
+    @team_data.each do |team|
+      if highest_ave_wins_against[0] == team[:team_id]
+        team_name += team[:team_name]
+      end
+    end
+    team_name
   end
 end
