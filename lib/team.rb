@@ -128,6 +128,7 @@ class Team
 
 	# Name of the opponent that has the lowest win percentage against the given team
   def favorite_opponent(team_id)
+    # List of all the games won by queried team
     games_won = select_team_games(team_id).select do |game|
       game[:result] == "WIN"
     end
@@ -137,6 +138,8 @@ class Team
     # run max_by to return relevant team id
     # link team id to team name from team_data
     # team 14 (DC United) should be result
+    
+    # Link game id between datasets, build list of wins by team id played against
     wins_by_team = Hash.new(0)
     games_won.each do |game_won| 
       game_by_id = @game_data.find do |game|
@@ -144,9 +147,29 @@ class Team
       end
 
       if game_by_id[:away_team_id] == team_id
-        wins_by_team[game_by_id[:home_team_id]] += 1
+        wins_by_team[game_by_id[:home_team_id]] += 1.0
       elsif game_by_id[:home_team_id] == team_id
-        wins_by_team[game_by_id[:away_team_id]] += 1
+        wins_by_team[game_by_id[:away_team_id]] += 1.0
+      end
+    end
+
+    # Make list of total games played against by team id
+    games_against = Hash.new(0)
+    @game_data.each do |game|
+      if game[:away_team_id] == team_id
+        games_against[game[:home_team_id]] += 1.0
+      elsif game[:home_team_id] == team_id
+        games_against[game[:away_team_id]] += 1.0
+      end
+    end
+
+    # Make list of average wins against by team id
+    # this method is bugged (or above is), it is returning 0.1 for several teams erroneously
+    average_wins = Hash.new(0)
+    wins_by_team.each do |team, win_count|
+      games_against.each do |team, game_count|
+        average = (win_count / game_count)
+        average_wins[team] = average
       end
     end
   end
