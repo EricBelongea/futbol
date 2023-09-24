@@ -132,20 +132,21 @@ class Team
       game[:result] == "WIN"
     end
     # compare win hash game_id to game_id in game_data to get teams played against
-    # tally count of wins for each team id and run max_by to return relevant team id
+    # tally count of wins for each team id
+    # divide tallies by total games played against each opponent
+    # run max_by to return relevant team id
     # link team id to team name from team_data
+    # team 14 (DC United) should be result
     wins_by_team = Hash.new(0)
-    games_won.each do |game_won|
-      game_id = game_won[:game_id]
+    games_won.each do |game_won| 
       game_by_id = @game_data.find do |game|
-        game_id
+        game_won[:game_id] == game[:game_id]
       end
+
       if game_by_id[:away_team_id] == team_id
-        team_id = game_by_id[:home_team_id]
-        wins_by_team[team_id] += 1
+        wins_by_team[game_by_id[:home_team_id]] += 1
       elsif game_by_id[:home_team_id] == team_id
-        team_id = game_by_id[:away_team_id]
-        wins_by_team[team_id] += 1
+        wins_by_team[game_by_id[:away_team_id]] += 1
       end
     end
   end
