@@ -133,7 +133,7 @@ RSpec.describe Team do
     expect(@team.favorite_opponent("18")).to eq "DC United"
   end
 
-  xit "#rival" do
+  it "#rival" do
     expect(@team.rival("18")).to eq("Houston Dash").or(eq("LA Galaxy"))
   end
 end

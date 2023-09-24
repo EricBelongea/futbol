@@ -190,4 +190,18 @@ class Team
     end
     team_name
   end
+
+  # Name of the opponent that has the highest win percentage against the given team
+  def rival(team_id)
+    lowest_win_ratio = win_ratio_against(team_id).min_by do |team_id, win_against|
+      win_against
+    end
+    team_name = ""
+    @team_data.each do |team|
+      if lowest_win_ratio[0] == team[:team_id]
+        team_name += team[:team_name]
+      end
+    end
+    team_name
+  end
 end
