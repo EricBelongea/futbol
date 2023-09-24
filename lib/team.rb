@@ -126,16 +126,17 @@ class Team
     end
   end
 
-	# Name of the opponent that has the lowest win ratio for the queried team
-  def favorite_opponent(team_id)
-    # List of all the games won by queried team
-    games_won = select_team_games(team_id).select do |game|
+  # List of all the games won by queried team
+  def games_won_by(team_id)
+    games_won_by = select_team_games(team_id).select do |game|
       game[:result] == "WIN"
     end
+  end
     
-    # Link game id between datasets, build list of wins by team id played against
+  # Link game id between datasets, build list of wins by team id played against
+  def wins_by_team(team_id)
     wins_by_team = Hash.new(0)
-    games_won.each do |game_won| 
+    games_won_by(team_id).each do |game_won| 
       game_by_id = @game_data.find do |game|
         game_won[:game_id] == game[:game_id]
       end
@@ -147,8 +148,10 @@ class Team
       end
     end
     wins_by_team.sort
+  end
 
-    # Make list of total games played against by team id
+  # Make list of total games played against by team id
+  def games_against(team_id)
     games_against = Hash.new(0)
     @game_data.each do |game|
       if game[:away_team_id] == team_id
@@ -158,24 +161,27 @@ class Team
       end
     end
     games_against.sort
+  end
 
-    # Make list of average wins against by team id
+  # Make list of average wins against by team id
+  def win_ratio_against(team_id)
     average_wins = Hash.new(0)
-    wins_by_team.each do |team_wins, win_count|
-      games_against.each do |team_games, game_count|
+    wins_by_team(team_id).each do |team_wins, win_count|
+      games_against(team_id).each do |team_games, game_count|
         average = (win_count / game_count)
         if team_wins == team_games
           average_wins[team_wins] = average
         end
       end
     end
-
-    # Get the team that has the lowest win ratio vs queried team
-    highest_win_ratio = average_wins.max_by do |team_id, win_against|
+    average_wins
+  end
+    
+	# Name of the opponent that has the lowest win ratio for the queried team
+  def favorite_opponent(team_id)
+    highest_win_ratio = win_ratio_against(team_id).max_by do |team_id, win_against|
       win_against
     end
-
-    # Link team id to team name
     team_name = ""
     @team_data.each do |team|
       if highest_win_ratio[0] == team[:team_id]

@@ -102,6 +102,33 @@ RSpec.describe Team do
     expect(@team.select_team_games("18")[0]).to eq(expected)
   end
 
+  it '#games_won_by' do
+    expected = {
+      :game_id=>"2016030233", 
+      :team_id=>"18", 
+      :hoa=>"home", 
+      :result=>"WIN", 
+      :head_coach=>"Peter Laviolette", 
+      :goals=>"3", 
+      :shots=>"8", 
+      :tackles=>"34"
+    }
+
+    expect(@team.games_won_by("18")[0]).to eq(expected)
+  end
+
+  it '#wins_by_team' do
+    expect(@team.wins_by_team("18")[0]).to eq(["1", 5.0])
+  end
+
+  it '#games_against' do
+    expect(@team.games_against("18")[0]).to eq(["1", 10.0])
+  end
+
+  it '#win_ratio_against' do
+    expect(@team.win_ratio_against("18")["19"]).to eq(0.4411764705882353)
+  end
+  
   it "#favorite_opponent" do
     expect(@team.favorite_opponent("18")).to eq "DC United"
   end
