@@ -164,22 +164,27 @@ class Team
     end
 
     # Make list of average wins against by team id
-    # this method is bugged (or above is), it is returning 0.1 for several teams erroneously
+    # I haven't yet figured out how to get this to not spit out junk numbers
     average_wins = Hash.new(0)
-    wins_by_team.each do |team, win_count|
-      games_against.each do |team, game_count|
+    wins_by_team.each do |team_wins, win_count|
+      games_against.each do |team_games, game_count|
         average = (win_count / game_count)
-        average_wins[team] = average
+        if team_wins == team_games
+          average_wins[team_wins] = average
+        end
       end
     end
 
+    # Run max_by to return relevant team id
+
+
     # Link team id to team name
-    team_name = ""
-    @team_data.each do |team|
-      if highest_ave_wins_against[0] == team[:team_id]
-        team_name += team[:team_name]
-      end
-    end
-    team_name
+  #   team_name = ""
+  #   @team_data.each do |team|
+  #     if highest_ave_wins_against[0] == team[:team_id]
+  #       team_name += team[:team_name]
+  #     end
+  #   end
+  #   team_name
   end
 end
