@@ -91,7 +91,6 @@ class League < Season
     highest_ave_id = ave_visitor_goals.max_by do |team_id, goals|
       goals
     end
-    highest_ave_id
   end
 
   def highest_scoring_visitor
@@ -109,7 +108,6 @@ class League < Season
     lowest_ave_id = ave_visitor_goals.min_by do |team_id, goals|
       goals
     end
-    lowest_ave_id
   end
 
   def lowest_scoring_visitor
@@ -151,7 +149,6 @@ class League < Season
     highest_ave_id = ave_home_goals.max_by do |team_id, goals|
       goals
     end
-    highest_ave_id
   end
 
   def highest_scoring_home_team
@@ -169,7 +166,6 @@ class League < Season
     lowest_ave_id = ave_home_goals.min_by do |team_id, goals|
       goals
     end
-    lowest_ave_id
   end
 
   def lowest_scoring_home_team
