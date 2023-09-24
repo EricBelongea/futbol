@@ -102,4 +102,26 @@ class Team
     end
     team_avg[team_id]
   end
+
+  # Highest number of goals a particular team has scored in a single game
+  def most_goals_scored(team_id)
+    queried_team_games = @game_team_data.select do |game|
+      game[:team_id] == team_id
+    end
+    highest_scoring_game = queried_team_games.max_by do |game|
+      game[:goals]
+    end
+    highest_scoring_game[:goals].to_i
+  end
+
+  # Lowest number of goals a particular team has scored in a single game
+  def fewest_goals_scored(team_id)
+    queried_team_games = @game_team_data.select do |game|
+      game[:team_id] == team_id
+    end
+    lowest_scoring_game = queried_team_games.min_by do |game|
+      game[:goals]
+    end
+    lowest_scoring_game[:goals].to_i
+  end
 end
